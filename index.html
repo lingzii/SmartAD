@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Smart message board</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.2/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+
+<body style="font-family: consolas;">
+    <div class="container">
+        <div class="d-flex justify-content-center m-4">
+            <div class="card w-50">
+                <div class="card-body">
+                    <h3 class="message">.</h3>
+                    <div class="card-text">
+                        <p class="nowPrice">.</p>
+                    </div>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control price">
+                        <span class="input-group-text">ETH</span>
+                    </div>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control string" placeholder="Your message"
+                            aria-label="Your message">
+                        <button class="btn btn-outline-secondary" type="button" id="submit">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/myABI.js"></script>
+    <script src="/index.js"></script>
+</body>
+
+</html>
