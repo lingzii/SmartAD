@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Smart message board</title>
+    <link rel="shortcut icon" href="https://img.icons8.com/nolan/344/github.png" type="image/x-icon">
+    <title>Smart AD board</title>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.2/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
@@ -12,168 +14,34 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="./index.css">
 </head>
 
 <body style="font-family: consolas;">
-    <div class="container">
-        <div class="d-flex justify-content-center m-4">
-            <div class="card w-50">
-                <div class="card-body">
-                    <h3 class="message">.</h3>
-                    <div class="card-text">
-                        <p class="nowPrice">.</p>
-                    </div>
-                    <div class="input-group mb-2">
-                        <span class="input-group-text">$</span>
-                        <input type="text" class="form-control price">
-                        <span class="input-group-text">ETH</span>
-                    </div>
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control string" placeholder="Your message"
-                            aria-label="Your message">
-                        <button class="btn btn-outline-secondary" type="button" id="submit">Submit</button>
-                    </div>
-                </div>
+    <div class="container-fluid m-4">
+        <div class="row mb-4">
+            <h3>廣告刊登系統</h3>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <p style="text-align: center;">
+                    <canvas class="drawable-region" style="border:1px solid black;"></canvas>
+                </p>
+                <textarea id="message" class="form-control mt-3 mb-3" rows="8"></textarea>
+                <p style="text-align: center;">
+                    <button type="button" id="submit" class="btn btn-outline-secondary">刊登</button>
+                </p>
+
+            </div>
+            <div class="col-8">
+                <div id="cardGroup" class="row row-cols-1 row-cols-md-2 g-4"></div>
             </div>
         </div>
     </div>
-    <script>
-        const myABI = [
-            {
-                inputs: [
-                    {
-                        internalType: "string",
-                        name: "first_message",
-                        type: "string",
-                    },
-                ],
-                stateMutability: "nonpayable",
-                type: "constructor",
-            },
-            {
-                inputs: [],
-                name: "gap",
-                outputs: [
-                    {
-                        internalType: "uint256",
-                        name: "",
-                        type: "uint256",
-                    },
-                ],
-                stateMutability: "view",
-                type: "function",
-            },
-            {
-                inputs: [],
-                name: "highestPrice",
-                outputs: [
-                    {
-                        internalType: "uint256",
-                        name: "",
-                        type: "uint256",
-                    },
-                ],
-                stateMutability: "view",
-                type: "function",
-            },
-            {
-                inputs: [],
-                name: "message",
-                outputs: [
-                    {
-                        internalType: "string",
-                        name: "",
-                        type: "string",
-                    },
-                ],
-                stateMutability: "view",
-                type: "function",
-            },
-            {
-                inputs: [
-                    {
-                        internalType: "uint256",
-                        name: "new_gap",
-                        type: "uint256",
-                    },
-                ],
-                name: "setGap",
-                outputs: [],
-                stateMutability: "nonpayable",
-                type: "function",
-            },
-            {
-                inputs: [
-                    {
-                        internalType: "uint256",
-                        name: "new_price",
-                        type: "uint256",
-                    },
-                ],
-                name: "setPrice",
-                outputs: [],
-                stateMutability: "nonpayable",
-                type: "function",
-            },
-            {
-                inputs: [
-                    {
-                        internalType: "string",
-                        name: "text",
-                        type: "string",
-                    },
-                ],
-                name: "transaction_to_update",
-                outputs: [],
-                stateMutability: "payable",
-                type: "function",
-            },
-        ];
-
-        const ct_addr = "0xFEa8AcbC56783b98Db46CcE6e96E1F454Ca28Ce6";
-        var contract;
-
-        window.onload = () => {
-            if (!window.web3) {
-                alert("MetaMask is not installed.");
-                return;
-            }
-            window.web3 = new Web3(window.web3.currentProvider);
-            contract = new web3.eth.Contract(myABI, ct_addr);
-            refresh_page();
-        };
-
-        async function transaction_to_update() {
-            let text = document.querySelector(".string").value;
-            let price = document.querySelector(".price").value;
-            let addr = await ethereum.request({ method: "eth_requestAccounts" });
-            if (text && price) {
-                let data = { from: addr[0], value: Web3.utils.toWei(price) };
-                await contract.methods.transaction_to_update(text).send(data);
-                refresh_page(false);
-            } else alert("price and message are wrong!");
-        }
-
-        async function refresh_page(from = true) {
-            if (from) {
-                var price = await contract.methods.highestPrice().call();
-                var text = await contract.methods.message().call();
-                var gap = await contract.methods.gap().call();
-            } else {
-                var price = document.querySelector(".price").value;
-                var text = document.querySelector(".string").value;
-                var gap = 0.0001;
-            }
-            var total = parseInt(price) + parseInt(gap);
-            document.querySelector(".message").innerHTML = text;
-            document.querySelector(".nowPrice").innerHTML =
-                "Now price: " + Web3.utils.fromWei(total.toString()) + " BCH";
-        }
-
-        document.querySelector("#submit").addEventListener("click", () => {
-            transaction_to_update();
-        });
-    </script>
 </body>
+
+<script src="./abi.js"></script>
+<script src="./draw.js"></script>
+<script src="./service.js"></script>
 
 </html>

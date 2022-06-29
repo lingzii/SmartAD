@@ -1,0 +1,13 @@
+.drawable-region {
+  width: 320px;
+  height: 160px;
+  box-sizing: border-box;
+  background: white;
+  user-select: none;
+  touch-action: none;
+}
+
+body,
+textarea {
+  background-color: rgb(220, 220, 220);
+}
