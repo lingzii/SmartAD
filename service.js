@@ -1,4 +1,4 @@
-const ct_addr = "0x05B493e59f2Fd587De4A6091DBcF0AddD2114bC6";
+const ct_addr = "0x7191e993f479148D8C46Ae19d8ac5BF54038B238";
 var contract, address, total;
 
 async function initMetamask() {
