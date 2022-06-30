@@ -1,6 +1,7 @@
 const ct_addr = "0x7191e993f479148D8C46Ae19d8ac5BF54038B238";
 var contract, address, total;
 
+// 初始化 Web3
 async function initMetamask() {
   if (!window.web3) {
     alert("You havn't install MetaMask");
@@ -10,11 +11,13 @@ async function initMetamask() {
   address = await connect2metamask();
 }
 
+// 連接到 Web3
 async function connect2metamask() {
   let address = await ethereum.request({ method: "eth_requestAccounts" });
   return address[0];
 }
 
+// 載入鏈上歷史資訊
 async function loadPastEvents() {
   let EVENTS;
 
@@ -35,6 +38,7 @@ async function loadPastEvents() {
   return EVENTS;
 }
 
+// 監聽鏈上最新資訊
 async function ListeningEvents() {
   var now_block_num = await web3.eth.getBlockNumber();
   await contract.events.Order(
@@ -50,6 +54,7 @@ async function ListeningEvents() {
   );
 }
 
+// 獲得合約上的當前價格
 async function get_data() {
   var price = await contract.methods.HighestPrice().call();
   var gap = await contract.methods.gap().call();
@@ -68,6 +73,7 @@ async function get_data() {
   console.log(Web3.utils.fromWei(total) + " ETH");
 }
 
+// 藉由 API 串接到 合約中的 function
 async function pay_me_and_say_sth(text, image1, image2, address, value) {
   let res = await contract.methods
     .pay_me_and_say_sth(text, image1, image2)
@@ -86,6 +92,7 @@ ListeningEvents();
 
 var Orders = loadPastEvents();
 
+// 按下上傳，觸發交易
 document.querySelector("#submit").addEventListener("click", (e) => {
   console.log(getRegionData().slice(0, 66));
   pay_me_and_say_sth(
